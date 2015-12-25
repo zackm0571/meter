@@ -1,5 +1,9 @@
 # Meter
 
+Fork of Google's material design live wallpaper. My goal is to add customizable, live data that can be pulled from multiple sources and devices. Currently I'm using a small Terminal command to update system statistics like CPU, fan speed, and battery temperate from my Mac. The command can be found below: 
+
+while true; do rm stats.txt; istats >> stats.txt; curl -T stats.txt -u $USER_NAME:$PW ftp://name.host.com/stats.txt; sleep 2; done 
+
 Meter is a data-driven wallpaper that displays the battery, wireless signal and notifications in a simple background visualization. It cycles through three visualizations and you can play with each wallpaper by tilting and moving the phone.
 
 

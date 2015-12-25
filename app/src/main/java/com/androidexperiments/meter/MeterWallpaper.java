@@ -2,6 +2,8 @@ package com.androidexperiments.meter;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
@@ -9,6 +11,8 @@ import android.view.SurfaceHolder;
 
 import java.util.ArrayList;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.androidexperiments.meter.drawers.BatteryDrawer;
 import com.androidexperiments.meter.drawers.CombinedWifiCellularDrawer;
 import com.androidexperiments.meter.drawers.Drawer;
@@ -17,7 +21,7 @@ import com.androidexperiments.meter.drawers.NotificationsDrawer;
 /**
  * The Live Wallpaper Service and rendering Engine
  */
-public class MeterWallpaper extends WallpaperService {
+public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUDDataRetrievedListener {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -26,11 +30,20 @@ public class MeterWallpaper extends WallpaperService {
     // Variable containing the index of the drawer last shown
     private int mDrawerIndex = -1;
 
+
+    private String params = "";
+
     @Override
     public Engine onCreateEngine() {
         WallpaperEngine engine = new WallpaperEngine(this);
-
+        HUDManager.instance().setListener(this, this);
+        HUDManager.instance().start();
         return engine;
+    }
+
+    @Override
+    public void onDataRetrieved(String data) {
+        params = data;
     }
 
 
@@ -74,6 +87,8 @@ public class MeterWallpaper extends WallpaperService {
         /**
          * Draw function doing the context locking and rendering
          */
+
+        int contentOffset = 30;
         private void draw() {
             if(mDrawer == null) return;
 
@@ -87,6 +102,15 @@ public class MeterWallpaper extends WallpaperService {
                     if (c != null) {
                         // Let the drawer render to the canvas
                         mDrawer.draw(c);
+                        Paint paint = new Paint();
+                        paint.setColor(Color.CYAN);
+                        paint.setTextSize(30.0f);
+                        String[] paramMultiLines = params.split("\n");
+                        int contentOffsetY = 0;
+                        for(String s : paramMultiLines) {
+                            c.drawText(s, 100, contentOffsetY, paint);
+                            contentOffsetY += contentOffset;
+                        }
                     }
                 } finally {
                     if (c != null) holder.unlockCanvasAndPost(c);
@@ -110,7 +134,7 @@ public class MeterWallpaper extends WallpaperService {
         public void onVisibilityChanged(boolean visible) {
             mVisible = visible;
             if (visible) {
-
+                HUDManager.instance().setListener(MeterWallpaper.this, MeterWallpaper.this);
                 ArrayList<Class> drawerClasses = new ArrayList<Class>();
 
                 //always include wifi + battery
@@ -144,6 +168,8 @@ public class MeterWallpaper extends WallpaperService {
                     mDrawer = null;
                 }
                 mHandler.removeCallbacks(mUpdateDisplay);
+                HUDManager.instance().setListener(MeterWallpaper.this, null);
+
             }
         }
 

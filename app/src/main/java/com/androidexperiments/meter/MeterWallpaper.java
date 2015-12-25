@@ -33,7 +33,7 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
 
 
     private String params = "";
-
+    private int max_HUD_lines = 5;
     @Override
     public Engine onCreateEngine() {
         WallpaperEngine engine = new WallpaperEngine(this);
@@ -106,9 +106,12 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
                         paint.setTextSize(textSize);
                         String[] paramMultiLines = params.split("\n");
                         int contentOffsetY = 100;
+                        int index = 0;
                         for(String s : paramMultiLines) {
+                            if(index >= max_HUD_lines){ break; }
                             c.drawText(s, 100, contentOffsetY, paint);
                             contentOffsetY += contentOffset;
+                            index++;
                         }
                     }
                 } finally {

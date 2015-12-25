@@ -59,6 +59,7 @@ public class HUDManager {
     public interface OnHUDDataRetrievedListener{
         void onDataRetrieved(String data);
     }
+    RequestQueue queue;
     public synchronized void getHUDParametersFromURL(Context context, String url){
 
         if(mDataListener != null) {
@@ -67,7 +68,7 @@ public class HUDManager {
             Display display = wm.getDefaultDisplay();
             screenSize = new Point();
             display.getSize(screenSize);
-            RequestQueue queue = Volley.newRequestQueue(context);
+            queue = Volley.newRequestQueue(context);
 
 // Request a string response from the provided URL.
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -77,14 +78,10 @@ public class HUDManager {
                             if(mDataListener != null) {
                                 String temp = "";
                                 int tempIndex;
-                                for (int i = (screenSize.x / 4); i < response.length(); i += (screenSize.x / 4)) {
+                                for (int i = (screenSize.x / 8); i < response.length(); i += (screenSize.x / 8)) {
                                     tempIndex = response.indexOf(" ", i);
-                                    if (tempIndex == -1) {
-                                        tempIndex = i;
-                                    }
-                                    else{
-                                        i = tempIndex;
-                                    }
+                                    if (tempIndex == -1) { tempIndex = i; }
+                                    else{ i = tempIndex; }
                                     temp = response.substring(tempIndex);
                                     response = response.substring(0, tempIndex) + "\n" + temp;
 

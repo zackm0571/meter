@@ -105,7 +105,7 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
                         paint.setColor(Color.CYAN);
                         paint.setTextSize(textSize);
                         String[] paramMultiLines = params.split("\n");
-                        int contentOffsetY = 0;
+                        int contentOffsetY = 100;
                         for(String s : paramMultiLines) {
                             c.drawText(s, 100, contentOffsetY, paint);
                             contentOffsetY += contentOffset;

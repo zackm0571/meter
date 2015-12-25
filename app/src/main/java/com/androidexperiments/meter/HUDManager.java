@@ -1,7 +1,10 @@
 package com.androidexperiments.meter;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Handler;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,6 +24,7 @@ public class HUDManager {
     private OnHUDDataRetrievedListener mDataListener;
     private Handler handler;
     private Context context;
+    private Point screenSize;
     public HUDManager(){
         handler = new Handler();
     }
@@ -54,6 +58,10 @@ public class HUDManager {
 
         if(mDataListener != null) {
 // Instantiate the RequestQueue.
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            screenSize = new Point();
+            display.getSize(screenSize);
             RequestQueue queue = Volley.newRequestQueue(context);
 
 // Request a string response from the provided URL.
@@ -63,11 +71,14 @@ public class HUDManager {
                         public void onResponse(String response) {
                             if(mDataListener != null) {
                                 String temp = "";
-                                int tempIndex = 0;
-                                for (int i = 1; i < response.length(); i += 10) {
+                                int tempIndex;
+                                for (int i = 0; i < response.length(); i += (screenSize.x / 4)) {
                                     tempIndex = response.indexOf(" ", i);
                                     if (tempIndex == -1) {
                                         tempIndex = i;
+                                    }
+                                    else{
+                                        i = tempIndex;
                                     }
                                     temp = response.substring(tempIndex);
                                     response = response.substring(0, tempIndex) + "\n" + temp;

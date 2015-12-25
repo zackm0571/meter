@@ -26,7 +26,6 @@ public class MainActivity extends Activity {
     protected Button mSetWallpaperBtn;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +80,10 @@ public class MainActivity extends Activity {
                 moveToNotificationListenerSettings();
                 break;
 
+            case R.id.options:
+                Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settings);
+                break;
             case R.id.about:
                 moveToAbout();
                 break;

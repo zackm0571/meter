@@ -6,39 +6,39 @@
         android:name="android.software.live_wallpaper"
         android:required="true" >
     </uses-feature>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"/>
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
 
     <application
         android:allowBackup="true"
-        android:logo="@drawable/meter_logo_padded"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:logo="@drawable/meter_logo_padded"
         android:theme="@style/CustomActionBarTheme" >
-
         <activity
-            android:name="com.androidexperiments.meter.SplashScreenActivity"
+            android:name=".SplashScreenActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.androidexperiments.meter.MainActivity"
-                  android:label="@string/app_name"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.androidexperiments.meter.LocalWebActivity"
-                  android:label="@string/app_name"
-                  android:screenOrientation="portrait">
-
+        <activity
+            android:name=".LocalWebActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
 
         <service
@@ -56,14 +56,22 @@
                 android:resource="@xml/wallpaper" >
             </meta-data>
         </service>
-
         <service
-            android:name="com.androidexperiments.meter.NotificationService"
+            android:name=".NotificationService"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.androidexperiments.meter.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

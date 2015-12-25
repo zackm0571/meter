@@ -1,6 +1,7 @@
 package com.androidexperiments.meter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -87,11 +88,9 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
         /**
          * Draw function doing the context locking and rendering
          */
-
-        int contentOffset = 30;
+        private int contentOffset, textSize;
         private void draw() {
             if(mDrawer == null) return;
-
             // Ask the drawer if wants to draw in this frame
             if(mDrawer.shouldDraw()) {
                 SurfaceHolder holder = getSurfaceHolder();
@@ -104,7 +103,7 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
                         mDrawer.draw(c);
                         Paint paint = new Paint();
                         paint.setColor(Color.CYAN);
-                        paint.setTextSize(30.0f);
+                        paint.setTextSize(textSize);
                         String[] paramMultiLines = params.split("\n");
                         int contentOffsetY = 0;
                         for(String s : paramMultiLines) {
@@ -135,6 +134,9 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
             mVisible = visible;
             if (visible) {
                 HUDManager.instance().setListener(MeterWallpaper.this, MeterWallpaper.this);
+                textSize = getSharedPreferences(getPackageName(), MODE_PRIVATE).getInt("text_size", 32);
+                contentOffset = textSize;
+
                 ArrayList<Class> drawerClasses = new ArrayList<Class>();
 
                 //always include wifi + battery

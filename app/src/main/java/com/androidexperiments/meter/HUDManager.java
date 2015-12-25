@@ -72,7 +72,7 @@ public class HUDManager {
                             if(mDataListener != null) {
                                 String temp = "";
                                 int tempIndex;
-                                for (int i = 0; i < response.length(); i += (screenSize.x / 4)) {
+                                for (int i = (screenSize.x / 4); i < response.length(); i += (screenSize.x / 4)) {
                                     tempIndex = response.indexOf(" ", i);
                                     if (tempIndex == -1) {
                                         tempIndex = i;

@@ -1,6 +1,7 @@
 package com.androidexperiments.meter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Handler;
 import android.view.Display;
@@ -25,6 +26,8 @@ public class HUDManager {
     private Handler handler;
     private Context context;
     private Point screenSize;
+    private String url_1;
+    private SharedPreferences pref;
     public HUDManager(){
         handler = new Handler();
     }
@@ -43,7 +46,9 @@ public class HUDManager {
     Runnable getParams = new Runnable() {
         @Override
         public void run() {
-            getHUDParametersFromURL(context, "http://www.zackmatthews.com/stats.txt");
+            pref = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+            url_1 = pref.getString("url_1", "http://www.zackmatthews.com/stats.txt");
+            getHUDParametersFromURL(context, url_1);
             handler.postDelayed(getParams, refreshInterval * 100);
         }
     };

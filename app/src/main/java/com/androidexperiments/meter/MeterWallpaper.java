@@ -188,6 +188,7 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
             super.onSurfaceDestroyed(holder);
             mVisible = false;
             mHandler.removeCallbacks(mUpdateDisplay);
+            HUDManager.instance().setListener(MeterWallpaper.this, null);
         }
 
         @Override
@@ -195,6 +196,7 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
             super.onDestroy();
             mVisible = false;
             mHandler.removeCallbacks(mUpdateDisplay);
+            HUDManager.instance().setListener(MeterWallpaper.this, null);
         }
     }
 

@@ -21,7 +21,7 @@ import java.util.Dictionary;
  */
 public class HUDManager {
     private static HUDManager instance;
-    private long refreshInterval = 30; //minutes
+    private long refreshInterval = 50; //minutes
     private OnHUDDataRetrievedListener mDataListener;
     private Handler handler;
     private Context context;

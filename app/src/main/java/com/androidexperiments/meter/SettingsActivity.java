@@ -142,6 +142,9 @@ public class SettingsActivity extends PreferenceActivity {
                 else if(preference.getKey().equals("url_1")){
                     pref.edit().putString("url_1", (String)value).commit();
                 }
+                else if(preference.getKey().equals("url_2")){
+                    pref.edit().putString("url_2", (String)value).commit();
+                }
             }
             return true;
         }
@@ -197,6 +200,7 @@ public class SettingsActivity extends PreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("text_size"));
             bindPreferenceSummaryToValue(findPreference("url_1"));
+            bindPreferenceSummaryToValue(findPreference("url_2"));
         }
 
         @Override

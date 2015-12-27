@@ -14,7 +14,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.List;
 
 /**
  * Created by zachmathews on 12/22/15.
@@ -27,6 +29,8 @@ public class HUDManager {
     private Context context;
     private Point screenSize;
     private String url_1;
+    private String url_2;
+    private List<String> results;
     private SharedPreferences pref;
     public HUDManager(){
         handler = new Handler();
@@ -46,9 +50,19 @@ public class HUDManager {
     Runnable getParams = new Runnable() {
         @Override
         public void run() {
+            results = new ArrayList<String>();
             pref = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
-            url_1 = pref.getString("url_1", "http://www.zackmatthews.com/stats.txt");
-            getHUDParametersFromURL(context, url_1);
+            url_1 = pref.getString("url_1", "");
+            url_2 = pref.getString("url_2", "");
+            if(mDataListener != null) {
+                if(!url_1.equals("")) {
+                    getHUDParametersFromURL(context, url_1);
+                }
+
+                if(!url_2.equals("")) {
+                    getHUDParametersFromURL(context, url_2);
+                }
+            }
             handler.postDelayed(getParams, refreshInterval * 100);
         }
     };
@@ -57,7 +71,7 @@ public class HUDManager {
     }
 
     public interface OnHUDDataRetrievedListener{
-        void onDataRetrieved(String data);
+        void onDataRetrieved(List<String> data);
     }
     RequestQueue queue;
     public synchronized void getHUDParametersFromURL(Context context, String url){
@@ -84,9 +98,9 @@ public class HUDManager {
                                     else{ i = tempIndex; }
                                     temp = response.substring(tempIndex);
                                     response = response.substring(0, tempIndex) + "\n" + temp;
-
                                 }
-                                mDataListener.onDataRetrieved(response);
+                                results.add(response);
+                                mDataListener.onDataRetrieved(results);
                             }
                         }
                         // Display the first 500 characters of the response string.

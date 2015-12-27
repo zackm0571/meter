@@ -11,6 +11,7 @@ import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -32,7 +33,7 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
     private int mDrawerIndex = -1;
 
 
-    private String params = "";
+    private List<String> params;
     private int max_HUD_lines = 5;
     @Override
     public Engine onCreateEngine() {
@@ -43,10 +44,9 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
     }
 
     @Override
-    public void onDataRetrieved(String data) {
+    public void onDataRetrieved(List<String> data) {
         params = data;
     }
-
 
     /**
      * The wallpaper engine that will handle the rendering
@@ -89,6 +89,7 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
          * Draw function doing the context locking and rendering
          */
         private int contentOffset, textSize;
+        private Paint paint = new Paint();
         private void draw() {
             if(mDrawer == null) return;
             // Ask the drawer if wants to draw in this frame
@@ -101,17 +102,24 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
                     if (c != null) {
                         // Let the drawer render to the canvas
                         mDrawer.draw(c);
-                        Paint paint = new Paint();
+
                         paint.setColor(Color.CYAN);
                         paint.setTextSize(textSize);
-                        String[] paramMultiLines = params.split("\n");
                         int contentOffsetY = 100;
-                        int index = 0;
-                        for(String s : paramMultiLines) {
-                            if(index >= max_HUD_lines){ break; }
-                            c.drawText(s, 100, contentOffsetY, paint);
-                            contentOffsetY += contentOffset;
-                            index++;
+                        if(params != null && params.size() > 0) {
+                            for (String data : params) {
+                                String[] paramMultiLines = data.split("\n");
+                                int index = 0;
+                                for (String s : paramMultiLines) {
+                                    if (index >= max_HUD_lines) {
+                                        break;
+                                    }
+                                    c.drawText(s, 100, contentOffsetY, paint);
+                                    contentOffsetY += contentOffset;
+                                    index++;
+                                }
+                                contentOffsetY += contentOffset * 2;
+                            }
                         }
                     }
                 } finally {

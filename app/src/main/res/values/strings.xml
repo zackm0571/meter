@@ -69,4 +69,5 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="pref_text_size">Text Size</string>
     <string name="pref_url_1">URL 1</string>
+    <string name="pref_url_2">URL 2</string>
 </resources>

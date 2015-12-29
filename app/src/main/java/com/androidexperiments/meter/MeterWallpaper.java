@@ -20,10 +20,12 @@ import com.androidexperiments.meter.drawers.CombinedWifiCellularDrawer;
 import com.androidexperiments.meter.drawers.Drawer;
 import com.androidexperiments.meter.drawers.NotificationsDrawer;
 
+import org.apache.commons.math3.util.Pair;
+
 /**
  * The Live Wallpaper Service and rendering Engine
  */
-public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUDDataRetrievedListener {
+public class MeterWallpaper extends WallpaperService{
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -31,21 +33,12 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
 
     // Variable containing the index of the drawer last shown
     private int mDrawerIndex = -1;
-
-
-    private List<String> params;
     private int max_HUD_lines = 5;
     @Override
     public Engine onCreateEngine() {
         WallpaperEngine engine = new WallpaperEngine(this);
-        HUDManager.instance().setListener(this, this);
-        HUDManager.instance().start();
+        HUDManager.instance().start(MeterWallpaper.this);
         return engine;
-    }
-
-    @Override
-    public void onDataRetrieved(List<String> data) {
-        params = data;
     }
 
     /**
@@ -106,8 +99,8 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
                         paint.setColor(Color.CYAN);
                         paint.setTextSize(textSize);
                         int contentOffsetY = 100;
-                        if(params != null && params.size() > 0) {
-                            for (String data : params) {
+                        for (String data: HUDManager.instance().getData()) {
+                            if (data != null && !data.equals("")) {
                                 String[] paramMultiLines = data.split("\n");
                                 int index = 0;
                                 for (String s : paramMultiLines) {
@@ -121,7 +114,8 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
                                 contentOffsetY += contentOffset * 2;
                             }
                         }
-                    }
+                     }
+
                 } finally {
                     if (c != null) holder.unlockCanvasAndPost(c);
                 }
@@ -144,7 +138,6 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
         public void onVisibilityChanged(boolean visible) {
             mVisible = visible;
             if (visible) {
-                HUDManager.instance().setListener(MeterWallpaper.this, MeterWallpaper.this);
                 textSize = getSharedPreferences(getPackageName(), MODE_PRIVATE).getInt("text_size", 32);
                 contentOffset = textSize;
 
@@ -181,8 +174,6 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
                     mDrawer = null;
                 }
                 mHandler.removeCallbacks(mUpdateDisplay);
-                HUDManager.instance().setListener(MeterWallpaper.this, null);
-
             }
         }
 
@@ -196,7 +187,6 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
             super.onSurfaceDestroyed(holder);
             mVisible = false;
             mHandler.removeCallbacks(mUpdateDisplay);
-            HUDManager.instance().setListener(MeterWallpaper.this, null);
         }
 
         @Override
@@ -204,7 +194,6 @@ public class MeterWallpaper extends WallpaperService implements HUDManager.OnHUD
             super.onDestroy();
             mVisible = false;
             mHandler.removeCallbacks(mUpdateDisplay);
-            HUDManager.instance().setListener(MeterWallpaper.this, null);
         }
     }
 

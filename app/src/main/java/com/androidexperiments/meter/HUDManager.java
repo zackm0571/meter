@@ -81,7 +81,9 @@ public class HUDManager {
             handler = new Handler();
             handler.postDelayed(getParams, refreshInterval * 100);
         }
-
+        public void stop(Context context){
+            handler.removeCallbacks(getParams);
+        }
         RequestQueue queue;
 
         public void getHUDParametersFromURL(Context context, final Pair url) {

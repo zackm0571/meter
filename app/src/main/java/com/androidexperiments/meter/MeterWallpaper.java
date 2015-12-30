@@ -140,7 +140,6 @@ public class MeterWallpaper extends WallpaperService{
             if (visible) {
                 textSize = getSharedPreferences(getPackageName(), MODE_PRIVATE).getInt("text_size", 32);
                 contentOffset = textSize;
-                HUDManager.instance().start(MeterWallpaper.this);
                 ArrayList<Class> drawerClasses = new ArrayList<Class>();
 
                 //always include wifi + battery
@@ -167,14 +166,15 @@ public class MeterWallpaper extends WallpaperService{
                 mDrawer.start();
                 // Start the drawing loop
                 draw();
+                HUDManager.instance().start(MeterWallpaper.this);
 
             } else {
                 if( mDrawer != null ) {
                     mDrawer.destroy();
                     mDrawer = null;
                 }
-                mHandler.removeCallbacks(mUpdateDisplay);
                 HUDManager.instance().stop(MeterWallpaper.this);
+                mHandler.removeCallbacks(mUpdateDisplay);
             }
         }
 

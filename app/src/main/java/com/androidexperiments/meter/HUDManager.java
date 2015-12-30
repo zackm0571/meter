@@ -76,15 +76,24 @@ public class HUDManager {
         }
     };
 
+        private RequestQueue queue;
         public void start(Context context) {
             this.context = context;
+            queue = Volley.newRequestQueue(context);
+            queue.start();
             handler = new Handler();
             handler.postDelayed(getParams, refreshInterval * 100);
         }
         public void stop(Context context){
+
             handler.removeCallbacks(getParams);
+            if(queue != null) {
+                queue.stop();
+                queue.getCache().clear();
+                queue = null;
+            }
         }
-        RequestQueue queue;
+
 
         public void getHUDParametersFromURL(Context context, final Pair url) {
 
@@ -93,7 +102,7 @@ public class HUDManager {
             Display display = wm.getDefaultDisplay();
             screenSize = new Point();
             display.getSize(screenSize);
-            queue = Volley.newRequestQueue(context);
+
 
             // Request a string response from the provided URL.
             StringRequest stringRequest = new StringRequest(Request.Method.GET, (String) url.getValue(),

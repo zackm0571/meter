@@ -112,7 +112,9 @@ public class SettingsActivity extends PreferenceActivity {
                     pref.edit().putString("url_2", (String) value).commit();
                 }
                 else if(preference.getKey().equals("refresh_interval")){
-                    pref.edit().putLong("refresh_interval", Long.parseLong(stringValue)).commit();
+                    if(!stringValue.equals("")) {
+                        pref.edit().putLong("refresh_interval", Long.valueOf(stringValue)).commit();
+                    }
                 }
             }
             return true;

@@ -111,6 +111,9 @@ public class SettingsActivity extends PreferenceActivity {
                 } else if (preference.getKey().equals("url_2")) {
                     pref.edit().putString("url_2", (String) value).commit();
                 }
+                else if(preference.getKey().equals("refresh_interval")){
+                    pref.edit().putLong("refresh_interval", Long.parseLong(stringValue)).commit();
+                }
             }
             return true;
         }
@@ -165,6 +168,7 @@ public class SettingsActivity extends PreferenceActivity {
             bindPreferenceSummaryToValue(findPreference("text_size"));
             bindPreferenceSummaryToValue(findPreference("url_1"));
             bindPreferenceSummaryToValue(findPreference("url_2"));
+            bindPreferenceSummaryToValue(findPreference("refresh_interval"));
         }
 
         @Override

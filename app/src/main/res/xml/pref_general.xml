@@ -35,4 +35,15 @@
         android:singleLine="true"
         android:text="32"
         android:maxLines="1" />
+
+    <EditTextPreference
+        android:key="refresh_interval"
+        android:title="@string/refresh_interval"
+        android:defaultValue="5"
+        android:selectAllOnFocus="true"
+        android:inputType="number"
+        android:capitalize="none"
+        android:singleLine="true"
+        android:text="5"
+        android:maxLines="1" />
 </PreferenceScreen>

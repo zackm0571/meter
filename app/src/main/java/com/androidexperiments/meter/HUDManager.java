@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class HUDManager {
     private static HUDManager instance;
-    private long refreshInterval = 50; //minutes
+    private long refreshIntervalSeconds;
     private Handler handler;
     private Context context;
     private Point screenSize;
@@ -63,6 +63,7 @@ public class HUDManager {
                 pref = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
                 url_1 = new Pair(0, pref.getString("url_1", ""));
                 url_2 = new Pair(1, pref.getString("url_2", ""));
+                refreshIntervalSeconds = pref.getLong("refresh_interval", 5);
 
                 if (!url_1.getValue().equals("")) {
                     getHUDParametersFromURL(context, url_1);
@@ -71,7 +72,7 @@ public class HUDManager {
                 if (!url_2.getValue().equals("")) {
                     getHUDParametersFromURL(context, url_2);
                 }
-                handler.postDelayed(getParams, refreshInterval * 100);
+                handler.postDelayed(getParams, refreshIntervalSeconds * 1000);
             }
         }
     };
@@ -82,7 +83,7 @@ public class HUDManager {
             queue = Volley.newRequestQueue(context);
             queue.start();
             handler = new Handler();
-            handler.postDelayed(getParams, refreshInterval * 100);
+            handler.postDelayed(getParams, refreshIntervalSeconds * 1000);
         }
         public void stop(Context context){
 

@@ -129,7 +129,9 @@ public class HUDManager {
 
                 }
             });
-        queue.add(stringRequest);
+            if(queue != null) {
+                queue.add(stringRequest);
+            }
     }
 }
 
